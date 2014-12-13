@@ -1,6 +1,7 @@
 import wbdata
 import pandas as pd
 import datetime
+import MySQLdb as myDB
 
  
 #indicators
@@ -80,13 +81,24 @@ df_1984 = addVar(has_data(til_1984, '1984'))
 df_1974 = addVar(has_data(til_1974, '1974'))
 
 
-#Determine which DFs aren't empty and export them to csv format.
+#If a DF isn't empty it is exported to mySQL and then saved in a csv format from mySQL
 df_list = [df_2014, df_2004, df_1994, df_1984, df_1974]
 df_years = ['All','2014','2004','1994','1984','1974']
 df_values = []
 y = 0
 for df in df_list:
     if df.empty == False:
-        df.to_csv("WB_{0}.csv".format(df_years[y]))
+        dbConnect = myDB.connect(host='localhost',
+            user='root',
+            passwd='root',
+            db='classwork') # assuming the database has already been established
+        df.to_sql(con=dbConnect,
+            name='WB_{0}_sql'.format(df_years[y]),
+            if_exists='replace',
+            flavor='mysql')
+        df_mysql = psql.frame_query('select * from WB_{0}_sql;'.format(df_years[y]), con=dbConnect)
+        df_mysql.to_csv('WB_{0}.csv'.format(df_years[y]))
         df_values.append(df)
     y += 1
+
+

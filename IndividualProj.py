@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Dec 02 20:33:45 2014
-
-@author: abdouglass
-"""
-
 import wbdata
 import pandas as pd
 import datetime
@@ -97,11 +90,3 @@ for df in df_list:
         df.to_csv("WB_{0}.csv".format(df_years[y]))
         df_values.append(df)
     y += 1
-
-
-
-
-
-
-
-
